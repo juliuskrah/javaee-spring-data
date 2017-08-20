@@ -1,0 +1,108 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.juliuskrah</groupId>
+  <artifactId>javaee-spring-data</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>war</packaging>
+
+  <name>javaee-spring-data</name>
+  <url>http://juliuskrah.com</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+
+    <h2.version>1.4.196</h2.version>
+    <hibernate.version>5.2.10.Final</hibernate.version>
+    <javaee-api.version>7.0</javaee-api.version>
+    <jax-rs.version>2.1</jax-rs.version>
+    <junit.version>4.12</junit.version>
+    <spring-data-releasetrain.version>Ingalls-SR6</spring-data-releasetrain.version>
+    <wildfly-swarm.version>2017.8.1</wildfly-swarm.version>
+  </properties>
+
+  <dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-releasetrain</artifactId>
+				<version>${spring-data-releasetrain.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+  <dependencies>
+    <dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+    <!-- JAX-RS -->
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>javax.ws.rs-api</artifactId>
+      <version>${jax-rs.version}</version>
+    </dependency>
+
+		<!-- Java EE 7 dependency -->
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+      <version>${javaee-api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2.version}</version>
+		</dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>${project.artifactId}</finalName>
+    <plugins>
+      <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+      </plugin>
+      <plugin>
+				<groupId>org.wildfly.swarm</groupId>
+				<artifactId>wildfly-swarm-plugin</artifactId>
+				<version>${wildfly-swarm.version}</version>
+				<configuration>
+					<properties>
+						<swarm.context.path>${project.build.finalName}</swarm.context.path>
+					</properties>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>package</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+    </plugins>
+  </build>
+</project>
